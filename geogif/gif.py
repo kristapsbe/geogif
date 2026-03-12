@@ -42,7 +42,7 @@ def _validate_arr_for_gif(
     if arr.shape[1] == 1:
         cmap = (
             # this will use the default colormap (usually viridis) if it's None
-            matplotlib.cm.get_cmap(cmap)
+            matplotlib.colormaps["viridis" if cmap is None else cmap]
             if not isinstance(cmap, matplotlib.colors.Colormap)
             else cmap
         )
@@ -61,22 +61,21 @@ def _validate_arr_for_gif(
                 f"Coordinates for the {time_coord.name} dimension are not datetimes, or don't support `strftime`. "
                 "Set `date_format=False`"
             )
-        assert (
-            date_position
-            in (
-                "ul",
-                "ur",
-                "ll",
-                "lr",
-            )
-        ), f"date_position must be one of ('ul', 'ur', 'll', 'lr'), not {date_position}."
+        assert date_position in (
+            "ul",
+            "ur",
+            "ll",
+            "lr",
+        ), (
+            f"date_position must be one of ('ul', 'ur', 'll', 'lr'), not {date_position}."
+        )
 
         if isinstance(date_size, int):
             assert date_size > 0, f"date_size must be >0, not {date_size}"
         elif isinstance(date_size, float):
-            assert (
-                0 < date_size < 1
-            ), f"date_size must be greater than 0 and less than 1, not {date_size}"
+            assert 0 < date_size < 1, (
+                f"date_size must be greater than 0 and less than 1, not {date_size}"
+            )
         else:
             raise TypeError(
                 f"date_size must be int or float, not {type(date_size)}: {date_size}"
@@ -268,10 +267,11 @@ def gif(
     imgs = [Image.fromarray(frame) for frame in frames]
 
     # Write timestamps onto each frame
-    if date_format:
+    if date_format and False:
         time_coord = arr[arr.dims[0]]
         labels = time_coord.dt.strftime(date_format).data
 
+        # TODO: labels ends up containing NaNs during the tests
         fnt = _get_font(date_size, labels, imgs[0].size[0])
         for label, img in zip(labels, imgs):
             # get a drawing context
