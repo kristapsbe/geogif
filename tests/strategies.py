@@ -8,7 +8,8 @@ import matplotlib.cm
 import matplotlib.colors
 import numpy as np
 import xarray as xr
-from hypothesis.extra import numpy as npst, pandas as pdst
+from hypothesis.extra import numpy as npst
+from hypothesis.extra import pandas as pdst
 
 time_inds = st.sampled_from(
     [np.dtype("datetime64[ns]"), np.dtype("timedelta64[ns]"), np.dtype(int)]  # type: ignore
@@ -58,8 +59,8 @@ def dataarrays(draw, dask: bool = False) -> xr.DataArray:
 
 
 # "_cmap_registry" is not a known member of module
-colormaps = st.none() | st.sampled_from(list(matplotlib.cm._cmap_registry)).flatmap(  # type: ignore
-    lambda cm: st.sampled_from([cm, matplotlib.cm.get_cmap(cm)])
+colormaps = st.none() | st.sampled_from(list(matplotlib.colormaps)).flatmap(  # type: ignore
+    lambda cm: st.sampled_from([cm, matplotlib.colormaps[cm]])
 )
 
 datecodes = st.sampled_from(
