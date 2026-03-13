@@ -1,19 +1,21 @@
-from __future__ import annotations
-
 import io
+
 from pathlib import Path
 from typing import TYPE_CHECKING, BinaryIO, cast
 
 import dask
+import IPython
+import numpy as np
+import xarray as xr
 import dask.array as da
 import matplotlib.cm
 import matplotlib.colors
-import numpy as np
-import xarray as xr
-from dask.delayed import Delayed
+
 from PIL import Image, ImageDraw, ImageFont
+from dask.delayed import Delayed
 from typing_extensions import Literal
 from xarray.plot.utils import _rescale_imshow_rgb
+
 
 if TYPE_CHECKING:
     import IPython.display

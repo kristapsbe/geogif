@@ -44,7 +44,7 @@ poetry install
 GeoGIF has some basic end-to-end tests, written with [Hypothesis](https://hypothesis.readthedocs.io/en/latest/index.html). To run:
 
 ```bash
-pytest
+poetry run pytest
 ```
 
 This will take ~30 seconds (longer the first time), as Hypothesis generates fake data to root out possible errors.

@@ -1,15 +1,15 @@
-from __future__ import annotations
-
 from string import printable
 
-import dask.array as da
-import hypothesis.strategies as st
-import matplotlib.cm
-import matplotlib.colors
 import numpy as np
 import xarray as xr
+import dask.array as da
+import matplotlib.cm
+import matplotlib.colors
+import hypothesis.strategies as st
+
 from hypothesis.extra import numpy as npst
 from hypothesis.extra import pandas as pdst
+
 
 time_inds = st.sampled_from(
     [np.dtype("datetime64[ns]"), np.dtype("timedelta64[ns]"), np.dtype(int)]  # type: ignore

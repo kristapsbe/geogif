@@ -1,25 +1,24 @@
-from __future__ import annotations
-
 from io import IOBase
-from pathlib import Path
 from typing import BinaryIO
+from pathlib import Path
 from unittest import mock
 
 import dask
-import hypothesis.strategies as st
+import pytest
+import xarray as xr
 import IPython.display
 import matplotlib.cm
 import matplotlib.colors
-import pytest
-import xarray as xr
+import hypothesis.strategies as st
+
 from hypothesis import given, note, settings
 from typing_extensions import Literal
 
-from geogif.gif import _get_font
 from geogif import dgif, gif
+from geogif.gif import _get_font
 
-from .strategies import colormaps, dataarrays, date_formats, rgb
 from .util import fails, ignore, xerr
+from .strategies import colormaps, dataarrays, date_formats, rgb
 
 
 def test_get_font_empty():
