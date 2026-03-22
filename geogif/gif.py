@@ -1,14 +1,13 @@
 import io
 
-from pathlib import Path
 from typing import TYPE_CHECKING, BinaryIO, cast
+from pathlib import Path
 
 import dask
-import IPython
+import dask.array as da
 import numpy as np
 import xarray as xr
-import dask.array as da
-import matplotlib.cm
+import IPython
 import matplotlib.colors
 
 from PIL import Image, ImageDraw, ImageFont
@@ -28,26 +27,22 @@ def _validate_arr_for_gif(
     date_position: Literal["ul", "ur", "ll", "lr"],
     date_size: int | float,
 ) -> tuple[xr.DataArray, matplotlib.colors.Colormap | None]:
+    if arr.size == 0:
+        raise ValueError("Array is empty")
+
     if arr.ndim not in (3, 4):
         raise ValueError(
             f"Array must only have the dimensions 'time', 'y', 'x', and optionally 'band', not {arr.dims!r}"
         )
-    if arr.ndim == 3:
+    elif arr.ndim == 3:
         arr = arr.expand_dims("band", axis=1)
 
     if arr.shape[1] not in (1, 3):
         raise ValueError(f"Array must have 1 or 3 bands, not {arr.shape[1]}")
-
-    if arr.size == 0:
-        raise ValueError("Array is empty")
-
-    if arr.shape[1] == 1:
-        cmap = (
+    elif arr.shape[1] == 1:
+        if not isinstance(cmap, matplotlib.colors.Colormap):
             # this will use the default colormap (usually viridis) if it's None
-            matplotlib.colormaps["viridis" if cmap is None else cmap]
-            if not isinstance(cmap, matplotlib.colors.Colormap)
-            else cmap
-        )
+            cmap = matplotlib.colormaps["viridis" if cmap is None else cmap]
     elif cmap is not None:
         raise ValueError(
             f"Colormaps are only possible on single-band data; this array has {arr.shape[1]} bands: "
@@ -73,17 +68,18 @@ def _validate_arr_for_gif(
         )
 
         if isinstance(date_size, int):
-            assert date_size > 0, f"date_size must be >0, not {date_size}"
+            assert date_size > 0, f"date_size must be greater than 0, not {date_size}"
         elif isinstance(date_size, float):
-            assert 0 < date_size < 1, (
-                f"date_size must be greater than 0 and less than 1, not {date_size}"
-            )
+            assert 0 < date_size < 1, f"date_size must be greater than 0 and less than 1, not {date_size}"
         else:
-            raise TypeError(
-                f"date_size must be int or float, not {type(date_size)}: {date_size}"
-            )
+            raise TypeError(f"date_size must be int or float, not {type(date_size)}: {date_size}")
 
     return (arr, cmap)
+
+
+def _text_width(font, test_label) -> int:
+    bbox = font.getbbox(test_label)
+    return bbox[2] - bbox[0]
 
 
 def _get_font(
@@ -108,16 +104,12 @@ def _get_font(
         # with adjustable size. So trying to increase the size would just
         # loop infinitely.
 
-        def text_width(font) -> int:
-            bbox = font.getbbox(test_label)
-            return bbox[2] - bbox[0]
-
-        if text_width(fnt) > 0:
+        if _text_width(fnt, test_label) > 0:
             # check for zero-width so we don't loop forever.
             # (could happen if `test_label` is an empty string or non-printable character)
 
             # increment font until you get large enough text
-            while text_width(fnt) <= target_width:
+            while _text_width(fnt, test_label) <= target_width:
                 try:
                     size = fnt.size + 1
                     fnt = ImageFont.load_default(size)
