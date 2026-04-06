@@ -45,8 +45,9 @@ def dataarrays(draw, dask: bool = False) -> xr.DataArray:
         arr = da.from_array(arr)
 
     ndim = len(shape)
+    # _validate_arr_for_gif will try to insert a dim named "band" if it sees 3 dims
     dim_names = draw(
-        st.lists(st.text(printable), min_size=ndim, max_size=ndim, unique=True)
+        st.lists(st.text(printable).filter(lambda s: s != "band"), min_size=ndim, max_size=ndim, unique=True)
     )
     coords = dict(zip(dim_names, [times, bandnames] if bandnames else [times]))
 
