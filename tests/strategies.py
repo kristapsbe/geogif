@@ -3,8 +3,7 @@ from string import printable
 import numpy as np
 import xarray as xr
 import dask.array as da
-import matplotlib.cm
-import matplotlib.colors
+import matplotlib
 import hypothesis.strategies as st
 
 from hypothesis.extra import numpy as npst

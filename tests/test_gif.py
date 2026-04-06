@@ -7,7 +7,6 @@ import dask
 import pytest
 import xarray as xr
 import IPython.display
-import matplotlib.cm
 import matplotlib.colors
 import hypothesis.strategies as st
 
