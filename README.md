@@ -35,6 +35,12 @@ See https://geogif.readthedocs.io/en/latest/.
 GeoGIF is managed by [Poetry](https://python-poetry.org/), so be sure that's installed first. To develop locally, first fork or clone the repo. Then, to set up a virtual environment and install the necessary dependencies:
 
 ```bash
+python3 -m pip install -r requirements.txt
+poetry python install 3.10
+poetry env use 3.10
+```
+
+```bash
 cd geogif
 poetry install
 ```

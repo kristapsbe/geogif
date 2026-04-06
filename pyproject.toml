@@ -8,20 +8,20 @@ repository = "https://github.com/gjoseph92/geogif"
 homepage = "https://geogif.readthedocs.io/en/latest/index.html"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "~=3.10"
 dask = {extras = ["delayed", "array"], version = ">=2026"}
-numpy = "^2.4"
+numpy = "^2.2"
 Pillow = "^12"
 matplotlib = "^3.10"
-xarray = ">=2026"
+xarray = ">=2025"
 
 [tool.poetry.group.dev.dependencies]
 jupyterlab = "^4.5"
-ipython = "^9.11"
+ipython = "^8.39"
 black = "^26.3"
 flake8 = "^7.3"
 shed = ">=2025"
-sphinx-autobuild = ">=2025"
+sphinx-autobuild = ">=2024"
 Bottleneck = "^1.6"
 keyring = "^25.7"
 twine = "^6.2"
@@ -30,15 +30,15 @@ netcdf4 = "^1.7"
 [tool.poetry.group.test.dependencies]
 pytest = "^9"
 hypothesis = "^6.151"
-ipython = "^9.11.0"
+ipython = "^8.39"
 
 
 [tool.poetry.group.docs.dependencies]
-Sphinx = "^9.1"
+Sphinx = "^8.1"
 numpydoc = "^1.10"
 pandoc = "^2.4"
 nbsphinx = "^0.9"
-sphinx-autodoc-typehints = "^3.9"
+sphinx-autodoc-typehints = "^3.0"
 coiled = "^1.133"
 distributed = ">=2026"
 pystac-client = "^0.9"
